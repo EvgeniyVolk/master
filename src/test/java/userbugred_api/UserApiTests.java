@@ -1,18 +1,15 @@
 package userbugred_api;
-import io.restassured.builder.RequestSpecBuilder;
+
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.testng.Assert;
+import static io.restassured.RestAssured.*;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static io.restassured.RestAssured.*;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.testng.Assert.assertEquals;
 
@@ -44,7 +41,7 @@ public class UserApiTests {
 
     @Test (priority = 2)
     private void createUser() {
-        int users = 2;
+        int users = 3;
 
         for(Integer i=1; i<=users; i++) {
 
@@ -103,6 +100,34 @@ public class UserApiTests {
                 .then().log().all()
                 .assertThat()
                 .body("type", equalTo("success"))
+                .extract().response();
+
+        assertEquals(200, response.getStatusCode());
+    }
+
+    @Test (priority = 5)
+    private void createCompany() {
+
+        ArrayList<String> users = new ArrayList<>();
+
+        users.add("apitest2@rest.com");
+        users.add("apitest3@rest.com");
+
+        CreateRequest createRequest = new CreateRequest();
+
+        createRequest.setCompany_name("API Rest Company");
+        createRequest.setCompany_type("ОАО");
+        createRequest.setEmail_owner("apitest1@rest.com");
+        createRequest.setCompany_users(users);
+
+
+        Response response = given()
+                .spec(requestSpecification)
+                .body(createRequest)
+                .when().post("/createcompany")
+                .then().log().all()
+                .assertThat()
+                .body("company.name", equalTo("API Rest Company"))
                 .extract().response();
 
         assertEquals(200, response.getStatusCode());
