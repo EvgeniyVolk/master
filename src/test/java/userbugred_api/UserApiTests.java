@@ -1,24 +1,30 @@
 package userbugred_api;
-import io.restassured.builder.RequestSpecBuilder;
+
 import io.restassured.http.ContentType;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.testng.Assert;
+import static io.restassured.RestAssured.*;
+
+import org.apache.commons.lang3.ObjectUtils;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static io.restassured.RestAssured.*;
+import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.*;
+import java.time.DayOfWeek;
+import java.lang.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.testng.Assert.assertEquals;
 
 public class UserApiTests {
     RequestSpecification requestSpecification;
-
+    CreateResponse createResponse = new CreateResponse();
     @BeforeClass
     public void setupRequestSpecefication() {
 
@@ -44,7 +50,7 @@ public class UserApiTests {
 
     @Test (priority = 2)
     private void createUser() {
-        int users = 2;
+        int users = 3;
 
         for(Integer i=1; i<=users; i++) {
 
@@ -67,34 +73,50 @@ public class UserApiTests {
     @Test (priority = 3)
     private void createTask() {
 
-        Map<String, String> request = new HashMap<>();
-        request.put("task_title", "Simple sample task");
-        request.put("task_description", "Test creation a new task");
-        request.put("email_owner", "apitest1@rest.com");
-        request.put("email_assign", "apitest2@rest.com");
+        CreateRequest request = new CreateRequest();
 
-        Response response = given()
+        request.setTask_title("Simple sample task");
+        request.setTask_description("Test creation a new task");
+        request.setEmail_owner("apitest1@rest.com");
+        request.setEmail_assign("apitest3@rest.com");
+
+        createResponse = given()
                 .spec(requestSpecification)
                 .body(request)
                 .when().post("/createtask")
                 .then().log().all()
-                .extract().response();
-
-        assertEquals(200, response.getStatusCode());
+                .assertThat()
+                .body("type", equalTo("success"))
+                .extract().body().as(CreateResponse.class);
     }
 
     @Test (priority = 4)
-    private void addTaskToCron() {
-
+    private void addTaskToCron() throws NullPointerException  {
+    try {
+        LocalDate localDate = LocalDate.now();
+        LocalTime time = LocalTime.now();
+        DayOfWeek dayOfWeek = DayOfWeek.from(localDate);
         Map<String, String> request = new HashMap<>();
 
-        request.put("task_id", "55");
+
+        String id;
+        Integer taskId = createResponse.getId_task();
+        if(taskId != null) { id = String.valueOf(taskId); } // if some integer got from response
+        else { id = "88"; }  // defaulted task id
+        int day = localDate.getDayOfMonth();
+        int weekDay = dayOfWeek.getValue();
+        int month = localDate.getMonthValue();
+        int hour = time.getHour();
+        int minute = time.getMinute();
+        if (minute + 15 <= 59) { minute += 15; }
+
+        request.put("task_id", id);
         request.put("email_owner", "apitest1@rest.com");
-        request.put("hours", "16");
-        request.put("minutes", "20");
-        request.put("month", "11");
-        request.put("days", "23");
-        request.put("day_weeks", "3");
+        request.put("hours", String.valueOf(hour));
+        request.put("minutes", String.valueOf(minute));
+        request.put("month", String.valueOf(month));
+        request.put("days", String.valueOf(day));
+        request.put("day_weeks", String.valueOf(weekDay));
 
         Response response = given()
                 .spec(requestSpecification)
@@ -103,6 +125,36 @@ public class UserApiTests {
                 .then().log().all()
                 .assertThat()
                 .body("type", equalTo("success"))
+                .extract().response();
+
+        } catch (NullPointerException e) {
+            System.out.println("Task Id is null");
+        }
+    }
+
+    @Test (priority = 5)
+    private void createCompany() {
+
+        ArrayList<String> users = new ArrayList<>();
+
+        users.add("apitest2@rest.com");
+        users.add("apitest3@rest.com");
+
+        CreateRequest request = new CreateRequest();
+
+        request.setCompany_name("API Rest Company");
+        request.setCompany_type("ОАО");
+        request.setEmail_owner("apitest1@rest.com");
+        request.setCompany_users(users);
+
+
+        Response response = given()
+                .spec(requestSpecification)
+                .body(request)
+                .when().post("/createcompany")
+                .then().log().all()
+                .assertThat()
+                .body("company.name", equalTo("API Rest Company"))
                 .extract().response();
 
         assertEquals(200, response.getStatusCode());

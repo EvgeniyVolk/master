@@ -4,21 +4,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import userbugred_api.UserApiTests;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
-
-import static java.lang.Thread.sleep;
-
-
 public class UserRegistration {
     protected static String userEmail;
     WebDriver driver = new ChromeDriver();
@@ -75,7 +66,6 @@ public class UserRegistration {
         driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
 
         softAssert.assertTrue(driver.getCurrentUrl().equals(baseUri), "User login failed!");
-        System.out.println(driver.getCurrentUrl() + "\n" + baseUri);
 
         softAssert.assertAll();
     }
