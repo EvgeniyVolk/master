@@ -7,6 +7,7 @@ import io.restassured.specification.RequestSpecification;
 import static io.restassured.RestAssured.*;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -17,6 +18,8 @@ import java.time.LocalTime;
 import java.util.*;
 import java.time.DayOfWeek;
 import java.lang.*;
+
+import static org.assertj.core.api.AbstractSoftAssertions.assertAll;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -25,6 +28,7 @@ import static org.testng.Assert.assertEquals;
 public class UserApiTests {
     RequestSpecification requestSpecification;
     CreateResponse createResponse = new CreateResponse();
+    SoftAssertions softAssertions = new SoftAssertions();
     @BeforeClass
     public void setupRequestSpecefication() {
 
@@ -64,9 +68,10 @@ public class UserApiTests {
                     .body(request)
                     .when().post("/doregister")
                     .then().log().all()
+                    .assertThat()
                     .extract().response();
 
-            assertEquals(200, response.getStatusCode());
+                    assertEquals(200, response.getStatusCode());
         }
     }
 
@@ -160,3 +165,4 @@ public class UserApiTests {
         assertEquals(200, response.getStatusCode());
     }
 }
+

@@ -69,4 +69,10 @@ public class UserRegistration {
 
         softAssert.assertAll();
     }
+
+    @Test(priority = 5)
+    private void findSceduledTask() {
+        WebElement tasks = driver.findElement(By.xpath("//a[@href=\"/tasks/index.html\"]"));
+        tasks.click();
+    }
 }
