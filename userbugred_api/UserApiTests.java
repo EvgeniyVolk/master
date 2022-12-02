@@ -7,9 +7,11 @@ import io.restassured.specification.RequestSpecification;
 import static io.restassured.RestAssured.*;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -17,6 +19,8 @@ import java.time.LocalTime;
 import java.util.*;
 import java.time.DayOfWeek;
 import java.lang.*;
+
+import static org.assertj.core.api.AbstractSoftAssertions.assertAll;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -25,6 +29,7 @@ import static org.testng.Assert.assertEquals;
 public class UserApiTests {
     RequestSpecification requestSpecification;
     CreateResponse createResponse = new CreateResponse();
+    SoftAssertions softAssertions = new SoftAssertions();
     @BeforeClass
     public void setupRequestSpecefication() {
 
@@ -64,9 +69,10 @@ public class UserApiTests {
                     .body(request)
                     .when().post("/doregister")
                     .then().log().all()
+                    .assertThat()
                     .extract().response();
 
-            assertEquals(200, response.getStatusCode());
+                    assertEquals(200, response.getStatusCode());
         }
     }
 
@@ -98,7 +104,6 @@ public class UserApiTests {
         DayOfWeek dayOfWeek = DayOfWeek.from(localDate);
         Map<String, String> request = new HashMap<>();
 
-
         String id;
         Integer taskId = createResponse.getId_task();
         if(taskId != null) { id = String.valueOf(taskId); } // if some integer got from response
@@ -117,6 +122,7 @@ public class UserApiTests {
         request.put("month", String.valueOf(month));
         request.put("days", String.valueOf(day));
         request.put("day_weeks", String.valueOf(weekDay));
+
         Response response = given()
                 .spec(requestSpecification)
                 .body(request)
@@ -158,4 +164,21 @@ public class UserApiTests {
 
         assertEquals(200, response.getStatusCode());
     }
+
+    @Test (priority = 6)
+    private void addAvatar() {
+        File myFile = new File("C:\\Users\\Home\\Desktop\\Evgeniy\\JavaProjects\\avatar.jpg");
+
+        Response response = given()
+                .baseUri("http://users.bugred.ru/tasks/rest")
+                .param("email", "apitest3@rest.com")
+                .contentType(ContentType.MULTIPART)
+                .multiPart("avatar", myFile) //sending an avatar file
+                .when().post("/addavatar")
+                .then().log().all()
+                .assertThat()
+                .body("status", equalTo("ok"))
+                .extract().response();
+    }
 }
+
