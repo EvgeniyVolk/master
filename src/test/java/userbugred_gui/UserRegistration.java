@@ -1,6 +1,7 @@
 package userbugred_gui;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -37,15 +38,18 @@ public class UserRegistration {
         SoftAssert softAssert = new SoftAssert();
 
         WebElement inputName = driver.findElement(By.name("name"));
-        WebElement inputEmail = driver.findElement(By.name("email"));
-        WebElement inputPassword = driver.findElement(By.xpath("//form[@action='/user/register/index.html'] //input[@name='password']"));
-        WebElement registerBtn = driver.findElement(By.name("act_register_now"));
-
         inputName.sendKeys("Злобный босс");
+
+        WebElement inputEmail = driver.findElement(By.name("email"));
         inputEmail.sendKeys("manager@mail.ru");
         userEmail = inputEmail.getAttribute("value");
+
+        WebElement inputPassword = driver.findElement(By.xpath("//form[@action='/user/register/index.html'] //input[@name='password']"));
         inputPassword.sendKeys("1");
+
+        WebElement registerBtn = driver.findElement(By.name("act_register_now"));
         registerBtn.click();
+
         driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
         softAssert.assertEquals(driver.getCurrentUrl(), baseUri, "User registration failed! Probably such user already exists");
 
@@ -57,22 +61,39 @@ public class UserRegistration {
         SoftAssert softAssert = new SoftAssert();
 
         WebElement inputLogin = driver.findElement(By.xpath("//input[@name='login']"));
-        WebElement password = driver.findElement(By.name("password"));
-        WebElement loginButton = driver.findElement(By.xpath("//*[@value='Авторизоваться']"));
-
         inputLogin.sendKeys("manager@mail.ru");
-        password.sendKeys("1");
-        loginButton.click();
-        driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
 
+        WebElement password = driver.findElement(By.name("password"));
+        password.sendKeys("1");
+
+        WebElement loginButton = driver.findElement(By.xpath("//*[@value='Авторизоваться']"));
+        loginButton.click();
+
+        driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
         softAssert.assertTrue(driver.getCurrentUrl().equals(baseUri), "User login failed!");
 
         softAssert.assertAll();
     }
 
     @Test(priority = 5)
-    private void findSceduledTask() {
-        WebElement tasks = driver.findElement(By.xpath("//a[@href=\"/tasks/index.html\"]"));
-        tasks.click();
+    private void findUser() {
+        SoftAssert softAssert = new SoftAssert();
+        try {
+            WebElement search = driver.findElement(By.xpath("//input[@placeholder='Введите email или имя']"));
+            search.sendKeys("apitest3");
+
+            WebElement searchBtn = driver.findElement(By.xpath("//button[@class='btn btn-submit']"));
+            searchBtn.click();
+
+            WebElement viewBtn = driver.findElement(By.xpath("//tbody[@class=\"ajax_load_row\"] //*[contains(text(), \"Посмотреть\")]"));
+            viewBtn.click();
+
+            WebElement avatar = driver.findElement(By.xpath("//div[@class='col-md-4 center'] //img[@src='/tmp/files/avatar.jpg']"));
+
+        } catch (NoSuchElementException e) {
+            softAssert.assertTrue(e.getMessage().isEmpty());
+            e.printStackTrace();
+            softAssert.assertAll();
+        }
     }
 }

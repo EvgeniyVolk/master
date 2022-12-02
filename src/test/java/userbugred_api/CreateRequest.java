@@ -1,5 +1,6 @@
 package userbugred_api;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class CreateRequest {
@@ -39,4 +40,6 @@ public class CreateRequest {
     public void setEmail_assign(String email_assign) {
         this.email_assign = email_assign;
     }
+
+
 }

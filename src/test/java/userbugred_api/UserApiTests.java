@@ -11,6 +11,7 @@ import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -103,7 +104,6 @@ public class UserApiTests {
         DayOfWeek dayOfWeek = DayOfWeek.from(localDate);
         Map<String, String> request = new HashMap<>();
 
-
         String id;
         Integer taskId = createResponse.getId_task();
         if(taskId != null) { id = String.valueOf(taskId); } // if some integer got from response
@@ -163,6 +163,22 @@ public class UserApiTests {
                 .extract().response();
 
         assertEquals(200, response.getStatusCode());
+    }
+
+    @Test (priority = 6)
+    private void addAvatar() {
+        File myFile = new File("C:\\Users\\Home\\Desktop\\Evgeniy\\JavaProjects\\avatar.jpg");
+
+        Response response = given()
+                .baseUri("http://users.bugred.ru/tasks/rest")
+                .param("email", "apitest3@rest.com")
+                .contentType(ContentType.MULTIPART)
+                .multiPart("avatar", myFile) //sending an avatar file
+                .when().post("/addavatar")
+                .then().log().all()
+                .assertThat()
+                .body("status", equalTo("ok"))
+                .extract().response();
     }
 }
 
