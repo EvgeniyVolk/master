@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import org.testng.IReporter;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -85,8 +86,12 @@ public class UserRegistration {
             WebElement searchBtn = driver.findElement(By.xpath("//button[@class='btn btn-submit']"));
             searchBtn.click();
 
-            WebElement viewBtn = driver.findElement(By.xpath("//tbody[@class=\"ajax_load_row\"] //*[contains(text(), \"Посмотреть\")]"));
-            viewBtn.click();
+            WebElement userEmail = driver.findElement(By.xpath("//tbody[@class='ajax_load_row'] //*[contains(text(), 'apitest3@rest.com')]"));
+
+            if(userEmail.isDisplayed()) {
+                WebElement viewBtn = driver.findElement(By.xpath("//tbody[@class=\"ajax_load_row\"] //*[contains(text(), \"Посмотреть\")]"));
+                viewBtn.click();
+            }
 
             WebElement avatar = driver.findElement(By.xpath("//div[@class='col-md-4 center'] //img[@src='/tmp/files/avatar.jpg']"));
 

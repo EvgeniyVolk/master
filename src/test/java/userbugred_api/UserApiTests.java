@@ -10,6 +10,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import org.uncommons.reportng.HTMLReporter;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -111,7 +112,7 @@ public class UserApiTests {
         int day = localDate.getDayOfMonth();
         int weekDay = dayOfWeek.getValue();
         int month = localDate.getMonthValue();
-        int hour = time.getHour();
+        int hour = time.getHour(); //does not work if hour is '0', because format should be '00'
         int minute = time.getMinute();
         if (minute + 15 <= 59) { minute += 15; }
 
