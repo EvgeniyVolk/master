@@ -1,6 +1,14 @@
 package userbugred_api;
 
-public final class Endpoints {
+import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
+
+import java.io.File;
+
+import static io.restassured.RestAssured.given;
+
+public class Specification {
+
     public static final String getUser = "/getuser";
     public static final String doRegester = "/doregister";
     public static final String createTask = "/createtask";
@@ -10,4 +18,12 @@ public final class Endpoints {
     public static final String deleteUser = "/deleteuser";
     public static final String search = "/magicsearch";
     public static final String deleteTask = "/deletetask";
+    public static final File myFile = new File("C:\\Users\\Home\\Desktop\\Evgeniy\\JavaProjects\\avatar.jpg");
+
+    public RequestSpecification setupSpecification() {
+
+        return given()
+                .baseUri("http://users.bugred.ru/tasks/rest")
+                .contentType(ContentType.JSON);
+    }
 }
