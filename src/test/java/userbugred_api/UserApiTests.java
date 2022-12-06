@@ -1,5 +1,6 @@
 package userbugred_api;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -9,6 +10,7 @@ import static io.restassured.RestAssured.*;
 import org.apache.commons.lang3.ObjectUtils;
 import org.assertj.core.api.SoftAssertions;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.uncommons.reportng.HTMLReporter;
 
@@ -31,8 +33,9 @@ public class UserApiTests {
     RequestSpecification requestSpecification;
     CreateResponse createResponse = new CreateResponse();
     SoftAssertions softAssertions = new SoftAssertions();
-    @BeforeClass
-    public void setupRequestSpecefication() {
+
+    @BeforeTest
+    public void setupRequestSpecification() {
 
         requestSpecification = given()
                 .baseUri("http://users.bugred.ru/tasks/rest")
@@ -45,7 +48,7 @@ public class UserApiTests {
         Response response = given()
                 .spec(requestSpecification)
                 .param("email", "manager@mail.ru")
-                .when().get("/getuser")
+                .when().get(Endpoints.getUser)
                 .then().log().all()
                 .assertThat()
                 .body("email", equalTo("manager@mail.ru"))
@@ -56,24 +59,24 @@ public class UserApiTests {
 
     @Test (priority = 2)
     private void createUser() {
+        CreateRequest request = new CreateRequest();
+
         int users = 3;
 
         for(Integer i=1; i<=users; i++) {
 
-            Map<String, String> request = new HashMap<>();
-            request.put("name", "ApiUser" + i.toString());
-            request.put("email", "apitest" + i.toString() + "@rest.com");
-            request.put("password", "passwordapi" + i.toString());
+//            Map<String, String> request = new HashMap<>();
+            request.setName("ApiUser" + i.toString());
+            request.setEmail("apitest" + i.toString() + "@rest.com");
+            request.setPassword("passwordapi" + i.toString());
 
-            Response response = given()
+            CreateResponse response = given()
                     .spec(requestSpecification)
                     .body(request)
-                    .when().post("/doregister")
+                    .when().post(Endpoints.doRegester)
                     .then().log().all()
                     .assertThat()
-                    .extract().response();
-
-                    assertEquals(200, response.getStatusCode());
+                    .extract().body().as(CreateResponse.class);
         }
     }
 
@@ -90,7 +93,7 @@ public class UserApiTests {
         createResponse = given()
                 .spec(requestSpecification)
                 .body(request)
-                .when().post("/createtask")
+                .when().post(Endpoints.createTask)
                 .then().log().all()
                 .assertThat()
                 .body("type", equalTo("success"))
@@ -127,7 +130,7 @@ public class UserApiTests {
         Response response = given()
                 .spec(requestSpecification)
                 .body(request)
-                .when().post("/addtaskincron")
+                .when().post(Endpoints.addTaskToCron)
                 .then().log().all()
                 .assertThat()
                 .body("type", equalTo("success"))
@@ -157,7 +160,7 @@ public class UserApiTests {
         Response response = given()
                 .spec(requestSpecification)
                 .body(request)
-                .when().post("/createcompany")
+                .when().post(Endpoints.createCompany)
                 .then().log().all()
                 .assertThat()
                 .body("company.name", equalTo("API Rest Company"))
@@ -175,10 +178,22 @@ public class UserApiTests {
                 .param("email", "apitest3@rest.com")
                 .contentType(ContentType.MULTIPART)
                 .multiPart("avatar", myFile) //sending an avatar file
-                .when().post("/addavatar")
+                .when().post(Endpoints.addAvatar)
                 .then().log().all()
                 .assertThat()
                 .body("status", equalTo("ok"))
+                .extract().response();
+    }
+
+    @Test (priority = 7)
+    private void magicSearch() {
+
+        Response response = given()
+                .param("query", "Api")
+                .spec(requestSpecification)
+                .when().get(Endpoints.search)
+                .then().log().all()
+                .assertThat()
                 .extract().response();
     }
 }

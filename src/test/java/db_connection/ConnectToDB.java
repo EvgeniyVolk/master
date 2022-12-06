@@ -1,4 +1,4 @@
-package userbugred_gui;
+package db_connection;
 
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
@@ -14,9 +14,9 @@ public class ConnectToDB {
     private static final String password = "root";
 
     // JDBC variables for opening and managing connection
-    private static Connection con;
-    private static Statement stmt;
-    private static ResultSet rs;
+    private static Connection connection;
+    private static Statement statement;
+    private static ResultSet result;
 
     @Test
     public void setUp() throws Exception {
@@ -24,33 +24,46 @@ public class ConnectToDB {
 
         try {
             // opening database connection to MySQL server
-            con = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(url, user, password);
 
             // getting Statement object to execute query
-            stmt = con.createStatement();
+            statement = connection.createStatement();
 
             // executing SELECT query
-            rs = stmt.executeQuery(query);
+            result = statement.executeQuery(query);
 
-            while (rs.next()) {
-                int count = rs.getInt(1);
+            while (result.next()) {
+                int count = result.getInt(1);
                 System.out.println("Total number of users in the table : " + count);
             }
-
         } catch (SQLException sqlEx) {
             sqlEx.printStackTrace();
         } finally {
             //close connection ,stmt and resultset here
             try {
-                con.close();
+                connection.close();
             } catch (SQLException se) { /*can't do anything */ }
             try {
-                stmt.close();
+                statement.close();
             } catch (SQLException se) { /*can't do anything */ }
             try {
-                rs.close();
+                result.close();
             } catch (SQLException se) { /*can't do anything */ }
         }
+    }
+
+    @Test
+    public void insertNewRecord() throws SQLException{
+        String query = "insert into userbugred.users (name, email, password) " +
+                "VALUES ('jdbcName1', 'jdbc1@mysql.com', 'jdbcpwd') ";
+
+        connection = DriverManager.getConnection(url, user, password);
+
+        // getting Statement object to execute query
+        statement = connection.createStatement();
+
+        // executing SELECT query
+        statement.executeUpdate(query);
     }
 }
 

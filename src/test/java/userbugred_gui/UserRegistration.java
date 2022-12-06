@@ -77,7 +77,7 @@ public class UserRegistration {
     }
 
     @Test(priority = 5)
-    private void findUser() {
+    private void checkAvatar() {
         SoftAssert softAssert = new SoftAssert();
         try {
             WebElement search = driver.findElement(By.xpath("//input[@placeholder='Введите email или имя']"));
