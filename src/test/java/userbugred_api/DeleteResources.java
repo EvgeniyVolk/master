@@ -63,7 +63,7 @@ public class DeleteResources {
         Response response = given()
                 .spec(requestSpecification)
                 .body(createRequest)
-                .when().put("/deletetask")
+                .when().put(Endpoints.deleteTask)
                 .then().log().all()
                 .extract().response();
     }
