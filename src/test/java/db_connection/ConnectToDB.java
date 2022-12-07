@@ -7,6 +7,9 @@ import org.testng.annotations.Test;
 import java.sql.*;
 
 import static io.opentelemetry.semconv.trace.attributes.SemanticAttributes.DB_USER;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
+
 public class ConnectToDB {
     // JDBC URL, username and password of MySQL server
     private static final String url = "jdbc:mysql://localhost:3306/userbugred";
@@ -18,6 +21,7 @@ public class ConnectToDB {
     private static Statement statement;
     private static ResultSet result;
 
+
     @Test
     public void setUp() throws Exception {
         String query = "select count(*) from users";
@@ -25,6 +29,8 @@ public class ConnectToDB {
         try {
             // opening database connection to MySQL server
             connection = DriverManager.getConnection(url, user, password);
+            assertTrue(connection.isValid(1));
+            assertFalse(connection.isClosed());
 
             // getting Statement object to execute query
             statement = connection.createStatement();
@@ -55,7 +61,7 @@ public class ConnectToDB {
     @Test
     public void insertNewRecord() throws SQLException{
         String query = "insert into userbugred.users (name, email, password) " +
-                "VALUES ('jdbcName1', 'jdbc1@mysql.com', 'jdbcpwd') ";
+                "VALUES ('jdbcName2', 'jdbc2@mysql.com', 'jdbcpwd') ";
 
         connection = DriverManager.getConnection(url, user, password);
 

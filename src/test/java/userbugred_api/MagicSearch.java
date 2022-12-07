@@ -13,7 +13,7 @@ public class MagicSearch {
         Specification specification = new Specification();
 
         Response response = given()
-                .param("query", "ApiUser1")
+                .param("query", "ApiUser")
                 .spec(specification.setupSpecification())
                 .when().get(Specification.search)
                 .then().log().all()

@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.testng.Assert.assertEquals;
 
 public class GetUser {
+
     @Test
     private void getUser() {
         Specification specification = new Specification();
