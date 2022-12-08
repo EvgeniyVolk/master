@@ -16,7 +16,7 @@ public class AddTaskInCron {
     @Test
     private void addTaskInCron() throws NullPointerException  {
         Specification specification = new Specification();
-        CreateResponse createResponse = new CreateResponse();
+//        CreateResponse createResponse = new CreateResponse();
 
         try {
             LocalDate localDate = LocalDate.now();
@@ -25,7 +25,7 @@ public class AddTaskInCron {
             Map<String, String> request = new HashMap<>();
 
             String id;
-            Integer taskId = createResponse.getId_task();
+            Integer taskId = Specification.response.getId_task();
             if(taskId != null) { id = String.valueOf(taskId); } // if some integer got from response
             else { id = "54"; }  // defaulted task id
             int day = localDate.getDayOfMonth();

@@ -19,6 +19,7 @@ public class Specification {
     public static final String search = "/magicsearch";
     public static final String deleteTask = "/deletetask";
     public static final File myFile = new File("C:\\Users\\Home\\Desktop\\Evgeniy\\JavaProjects\\avatar.jpg");
+    static CreateResponse response = new CreateResponse();
 
     public RequestSpecification setupSpecification() {
 

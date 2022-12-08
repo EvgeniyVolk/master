@@ -6,23 +6,25 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import org.testng.IReporter;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import java.util.concurrent.TimeUnit;
+
+
 public class UserRegistration {
-    protected static String userEmail;
     WebDriver driver = new ChromeDriver();
-    static final String baseUri = "http://users.bugred.ru/";
+    String userEmail;
+    String baseUri = "http://users.bugred.ru/";
 
     @BeforeTest
     private void setUp() {
+
         driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.get(baseUri);
     }
-
     @Test (priority = 1)
     private void openLoginPage() throws InterruptedException {
         SoftAssert softAssert = new SoftAssert();

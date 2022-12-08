@@ -8,7 +8,7 @@ import static org.hamcrest.Matchers.equalTo;
 public class CreateTask {
     @Test
     private void createTask() {
-        CreateResponse response = new CreateResponse();
+//        CreateResponse response = new CreateResponse();
         CreateRequest request = new CreateRequest();
         Specification specification = new Specification();
 
@@ -17,7 +17,7 @@ public class CreateTask {
         request.setEmail_owner("apitest1@rest.com");
         request.setEmail_assign("apitest3@rest.com");
 
-        response = given()
+        Specification.response = given()
                 .spec(specification.setupSpecification())
                 .body(request)
                 .when().post(Specification.createTask)
