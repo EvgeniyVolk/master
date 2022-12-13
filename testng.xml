@@ -17,7 +17,11 @@
 
     <test name = "GUI Tests">
         <classes>
-            <class name = "userbugred_gui.UserRegistration"/>
+<!--            <class name = "userbugred_gui.UserRegistration"/>-->
+            <class name="userbugred_gui.StartPage"/>
+            <class name="userbugred_gui.LoginPage"/>
+            <class name="userbugred_gui.UserAuthorization"/>
+            <class name="userbugred_gui.FindUser"/>
         </classes>
     </test>
 </suite>
