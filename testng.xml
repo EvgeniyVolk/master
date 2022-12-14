@@ -10,7 +10,7 @@
             <class name = "userbugred_api.AddTaskInCron" />
             <class name = "userbugred_api.CreateCompany" />
             <class name = "userbugred_api.MagicSearch" />
-<!--            <class name = "userbugred_api.DeleteTask" />-->
+            <class name = "userbugred_api.DeleteTask" />
 <!--            <class name = "userbugred_api.DeleteUser" />-->
         </classes>
     </test>

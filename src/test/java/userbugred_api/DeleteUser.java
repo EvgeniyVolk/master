@@ -10,6 +10,7 @@ import static io.restassured.RestAssured.given;
 import static org.testng.Assert.assertEquals;
 
 public class DeleteUser {
+
     @Test
     private void deleteUser() {
         int users = 3;

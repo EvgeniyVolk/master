@@ -7,7 +7,7 @@ import java.sql.*;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-public class GetJdbcConnection {
+public class SetupJdbcConnection {
     // JDBC URL, username and password of MySQL server
     private static final String url = "jdbc:mysql://localhost:3306/userbugred";
     private static final String user = "root";

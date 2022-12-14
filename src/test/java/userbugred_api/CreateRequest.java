@@ -45,6 +45,7 @@ public class CreateRequest {
     public void setCompany_users(ArrayList<String> company_users) {
         this.company_users = company_users;
     }
+
     public void setTask_id(String task_id) {this.task_id = task_id; }
 
     public void setTask_title(String task_title) {
