@@ -11,16 +11,15 @@ public class DeleteTask {
         Specification specification = new Specification();
 
         CreateRequest createRequest = new CreateRequest();
-
         createRequest.setEmail_owner("apitest1@rest.com");
         createRequest.setCompany_name("API Rest Company");
-        createRequest.setTask_id("47");
+        createRequest.setTask_id(String.valueOf(Specification.response.getId_task()));
 
-        Response response = given()
+        Specification.response = given()
                 .spec(specification.setupSpecification())
                 .body(createRequest)
-                .when().put(Specification.deleteTask)
+                .when().post(Specification.deleteTask)
                 .then().log().all()
-                .extract().response();
+                .extract().body().as(CreateResponse.class);
     }
 }

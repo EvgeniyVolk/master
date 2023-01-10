@@ -4,6 +4,7 @@
     <test name = "API Tests">
         <classes>
             <class name = "userbugred_api.GetUser" />
+            <class name = "userbugred_api.DeleteUser" />
             <class name = "userbugred_api.DoRegister" />
             <class name = "userbugred_api.AddAvatar" />
             <class name = "userbugred_api.CreateTask" />
@@ -11,17 +12,15 @@
             <class name = "userbugred_api.CreateCompany" />
             <class name = "userbugred_api.MagicSearch" />
             <class name = "userbugred_api.DeleteTask" />
-<!--            <class name = "userbugred_api.DeleteUser" />-->
         </classes>
     </test>
 
     <test name = "GUI Tests">
         <classes>
-<!--            <class name = "userbugred_gui.UserRegistration"/>-->
-            <class name="userbugred_gui.StartPage"/>
-            <class name="userbugred_gui.LoginPage"/>
-            <class name="userbugred_gui.UserAuthorization"/>
-            <class name="userbugred_gui.FindUser"/>
+            <class name = "userbugred_gui.StartPage"/>
+            <class name = "userbugred_gui.LoginPage"/>
+            <class name = "userbugred_gui.UserAuthorization"/>
+            <class name = "userbugred_gui.FindUser"/>
         </classes>
     </test>
 </suite>
